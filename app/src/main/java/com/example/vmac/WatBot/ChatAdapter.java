@@ -1,9 +1,5 @@
 package com.example.vmac.WatBot;
 
-/**
- * Created by VMac on 17/11/16.
- */
-
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,21 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import java.util.ArrayList;
 
-
-
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
 
     private int SELF = 100;
     private ArrayList<Message> messageArrayList;
 
-
     public ChatAdapter(ArrayList<Message> messageArrayList) {
         this.messageArrayList=messageArrayList;
-
     }
 
     @Override
@@ -43,8 +33,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chat_item_watson, parent, false);
         }
-
-
         return new ViewHolder(itemView);
     }
 
@@ -54,7 +42,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (message.getId()!=null && message.getId().equals("1")) {
             return SELF;
         }
-
         return position;
     }
 

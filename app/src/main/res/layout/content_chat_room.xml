@@ -34,8 +34,8 @@
             android:elevation="0dp"
             android:paddingLeft="10dp"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_mic" />
-
+            android:src="@android:drawable/ic_btn_speak_now"
+            />
         <EditText
             android:id="@+id/message"
             android:layout_width="0dp"
@@ -48,14 +48,6 @@
             android:lines="1"
             android:paddingLeft="10dp" />
 
-        <!--<Button android:id="@+id/btn_send"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@null"
-            android:text="ASK"
-            android:textSize="16dp"
-            android:textColor="@color/colorPrimary" />-->
         <android.support.v7.widget.AppCompatImageButton
             android:id="@+id/btn_send"
             android:layout_width="0dp"
@@ -63,11 +55,11 @@
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:background="@null"
-            android:elevation="0dp"
+            android:elevation="2dp"
             android:paddingLeft="10dp"
             android:scaleType="fitCenter"
-            android:src="@mipmap/ic_send" />
-
+            android:src="@android:drawable/ic_menu_send"
+            />
 
     </LinearLayout>
 

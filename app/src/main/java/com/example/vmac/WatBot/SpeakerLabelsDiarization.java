@@ -14,10 +14,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
-/**
- * Created by VMac on 15/05/17.
- */
-
 public class SpeakerLabelsDiarization {
     public static class RecoToken {
         private Double startTime;
@@ -26,85 +22,45 @@ public class SpeakerLabelsDiarization {
         private String word;
         private Boolean spLabelIsFinal;
 
-        /**
-         * Instantiates a new reco token.
-         *
-         * @param speechTimestamp the speech timestamp
-         */
         RecoToken(SpeechTimestamp speechTimestamp) {
             startTime = speechTimestamp.getStartTime();
             endTime = speechTimestamp.getEndTime();
             word = speechTimestamp.getWord();
         }
 
-        /**
-         * Instantiates a new reco token.
-         *
-         * @param speakerLabel the speaker label
-         */
         RecoToken(SpeakerLabel speakerLabel) {
             startTime = speakerLabel.getFrom();
             endTime = speakerLabel.getTo();
             speaker = speakerLabel.getSpeaker();
         }
 
-        /**
-         * Update from.
-         *
-         * @param speechTimestamp the speech timestamp
-         */
         void updateFrom(SpeechTimestamp speechTimestamp) {
             word = speechTimestamp.getWord();
         }
 
-        /**
-         * Update from.
-         *
-         * @param speakerLabel the speaker label
-         */
         void updateFrom(SpeakerLabel speakerLabel) {
             speaker = speakerLabel.getSpeaker();
         }
     }
 
-    /**
-     * The Class Utterance.
-     */
     public static class Utterance {
         private Integer speaker;
         private String transcript = "";
 
-        /**
-         * Instantiates a new utterance.
-         *
-         * @param speaker the speaker
-         * @param transcript the transcript
-         */
         public Utterance(final Integer speaker, final String transcript) {
             this.speaker = speaker;
             this.transcript = transcript;
         }
     }
 
-    /**
-     * The Class RecoTokens.
-     */
     public static class RecoTokens {
 
         private Map<Double, RecoToken> recoTokenMap;
 
-        /**
-         * Instantiates a new reco tokens.
-         */
         public RecoTokens() {
             recoTokenMap = new LinkedHashMap<Double, RecoToken>();
         }
 
-        /**
-         * Adds the.
-         *
-         * @param speechResults the speech results
-         */
         public void add(SpeechResults speechResults) {
             if (speechResults.getResults() != null)
                 for (int i = 0; i < speechResults.getResults().size(); i++) {
@@ -122,14 +78,8 @@ public class SpeakerLabelsDiarization {
                 for (int i = 0; i < speechResults.getSpeakerLabels().size(); i++) {
                     add(speechResults.getSpeakerLabels().get(i));
                 }
-
         }
 
-        /**
-         * Adds the.
-         *
-         * @param speechTimestamp the speech timestamp
-         */
         public void add(SpeechTimestamp speechTimestamp) {
             RecoToken recoToken = recoTokenMap.get(speechTimestamp.getStartTime());
             if (recoToken == null) {
@@ -140,11 +90,6 @@ public class SpeakerLabelsDiarization {
             }
         }
 
-        /**
-         * Adds the.
-         *
-         * @param speakerLabel the speaker label
-         */
         public void add(SpeakerLabel speakerLabel) {
             RecoToken recoToken = recoTokenMap.get(speakerLabel.getFrom());
             if (recoToken == null) {
@@ -170,9 +115,6 @@ public class SpeakerLabelsDiarization {
             }
         }
 
-        /**
-         * Report.
-         */
         public void report() {
             List<Utterance> uttterances = new ArrayList<Utterance>();
             Utterance currentUtterance = new Utterance(0, "");

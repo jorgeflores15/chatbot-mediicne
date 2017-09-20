@@ -1,9 +1,5 @@
 package com.example.vmac.WatBot;
 
-/**
- * Created by VMac on 17/11/16.
- */
-
 import java.io.Serializable;
 
 public class Message implements Serializable {
@@ -16,8 +12,6 @@ public class Message implements Serializable {
     public Message(String id, String message, String createdAt) {
         this.id = id;
         this.message = message;
-
-
     }
 
     public String getId() {

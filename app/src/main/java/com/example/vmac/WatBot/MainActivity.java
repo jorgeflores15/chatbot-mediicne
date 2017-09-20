@@ -49,9 +49,7 @@ import java.util.Map;
 
 import static com.ibm.watson.developer_cloud.android.library.audio.MicrophoneHelper.REQUEST_PERMISSION;
 
-
 public class MainActivity extends AppCompatActivity {
-
 
     private RecyclerView recyclerView;
     private ChatAdapter mAdapter;
@@ -82,8 +80,6 @@ public class MainActivity extends AppCompatActivity {
     private String analytics_APIKEY;
     private SpeakerLabelsDiarization.RecoTokens recoTokens;
     private MicrophoneHelper microphoneHelper;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,19 +151,17 @@ public class MainActivity extends AppCompatActivity {
         sendMessage();
 
 
-        //Watson Text-to-Speech Service on Bluemix
+        //Watson Servicio de Texto a voz con BlueMix
         textToSpeech = new TextToSpeech();
         textToSpeech.setUsernameAndPassword(TTS_username, TTS_password);
-
 
         int permission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO);
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "Permission to record denied");
+            Log.i(TAG, "Permiso para grabar denegado");
             makeRequest();
         }
-
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
             @Override
@@ -183,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                                 //Change the Voice format and choose from the available choices
                                 streamPlayer.playStream(textToSpeech.synthesize(audioMessage.getMessage(), Voice.EN_LISA).execute());
                             else
-                                streamPlayer.playStream(textToSpeech.synthesize("No Text Specified", Voice.EN_LISA).execute());
+                                streamPlayer.playStream(textToSpeech.synthesize("No hay texto especificado", Voice.EN_LISA).execute());
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -196,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLongClick(View view, int position) {
                 recordMessage();
-
             }
         }));
 
@@ -230,16 +223,16 @@ public class MainActivity extends AppCompatActivity {
                         || grantResults[0] !=
                         PackageManager.PERMISSION_GRANTED) {
 
-                    Log.i(TAG, "Permission has been denied by user");
+                    Log.i(TAG, "El permiso ha sido denegado por el usuario");
                 } else {
-                    Log.i(TAG, "Permission has been granted by user");
+                    Log.i(TAG, "El permiso ha sido otorgado por el usuario");
                 }
                 return;
             }
 
             case MicrophoneHelper.REQUEST_PERMISSION: {
                 if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission to record audio denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permiso para grabar audio denegado", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -252,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{Manifest.permission.RECORD_AUDIO},
                 MicrophoneHelper.REQUEST_PERMISSION);
     }
-
     // Sending a message to Watson Conversation Service
     private void sendMessage() {
 
@@ -262,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
             inputMessage.setMessage(inputmessage);
             inputMessage.setId("1");
             messageArrayList.add(inputMessage);
-            myLogger.info("Sending a message to Watson Conversation Service");
+            myLogger.info("Enviando el mensaje a Servicio de Watson");
 
         }
         else
@@ -271,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
             inputMessage.setMessage(inputmessage);
             inputMessage.setId("100");
             this.initialRequest = false;
-            Toast.makeText(getApplicationContext(),"Tap on the message for Voice",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Toque el icono para enviar mensaje",Toast.LENGTH_LONG).show();
 
         }
 
@@ -318,17 +310,13 @@ public class MainActivity extends AppCompatActivity {
 
                             }
                         });
-
-
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
-
         thread.start();
-
     }
 
     //Record a message via Watson Speech to Text
@@ -336,7 +324,6 @@ public class MainActivity extends AppCompatActivity {
         //mic.setEnabled(false);
         speechService = new SpeechToText();
         speechService.setUsernameAndPassword(STT_username, STT_password);
-
 
         if(listening != true) {
             capture = microphoneHelper.getInputStream(true);
@@ -350,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }).start();
             listening = true;
-            Toast.makeText(MainActivity.this,"Listening....Click to Stop", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this,"Escuchando.. Click para detener", Toast.LENGTH_LONG).show();
 
         } else {
             try {
@@ -382,10 +369,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         else {
-            Toast.makeText(this, " No Internet Connection available ", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, " Conexion de internet no disponible ", Toast.LENGTH_LONG).show();
             return false;
         }
-
     }
 
     //Private Methods - Speech to Text
@@ -396,59 +382,43 @@ public class MainActivity extends AppCompatActivity {
                 //.model("en-UK_NarrowbandModel")
                 .interimResults(true)
                 .inactivityTimeout(2000)
-                //TODO: Uncomment this to enable Speaker Diarization
                 //.speakerLabels(true)
                 .build();
     }
-
     //Watson Speech to Text Methods.
     private class MicrophoneRecognizeDelegate implements RecognizeCallback {
         @Override
         public void onTranscription(SpeechResults speechResults) {
-            //TODO: Uncomment this to enable Speaker Diarization
             /*recoTokens = new SpeakerLabelsDiarization.RecoTokens();
             if(speechResults.getSpeakerLabels() !=null)
             {
                 recoTokens.add(speechResults);
                 Log.i("SPEECHRESULTS",speechResults.getSpeakerLabels().get(0).toString());
-
-
             }*/
             if(speechResults.getResults() != null && !speechResults.getResults().isEmpty()) {
                 String text = speechResults.getResults().get(0).getAlternatives().get(0).getTranscript();
                 showMicText(text);
             }
         }
-
         @Override public void onConnected() {
-
         }
-
         @Override public void onError(Exception e) {
             showError(e);
             enableMicButton();
         }
-
         @Override public void onDisconnected() {
             enableMicButton();
         }
-
         @Override
         public void onInactivityTimeout(RuntimeException runtimeException) {
-
         }
-
         @Override
         public void onListening() {
-
         }
-
         @Override
         public void onTranscriptionComplete() {
-
         }
     }
-
     private void showMicText(final String text) {
         runOnUiThread(new Runnable() {
             @Override public void run() {
@@ -456,7 +426,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void enableMicButton() {
         runOnUiThread(new Runnable() {
             @Override public void run() {
@@ -464,7 +433,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void showError(final Exception e) {
         runOnUiThread(new Runnable() {
             @Override public void run() {
@@ -473,10 +441,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 }
-
-
-
